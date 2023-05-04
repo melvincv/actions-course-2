@@ -6,6 +6,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    outputs:
+      npm-cache-dir: ${{ steps.npm-cache-dir.outputs.dir }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -34,7 +36,7 @@ jobs:
         uses: actions/cache@v3
         with:
           key: npm-cache-${{ hashFiles('**/package-lock.json') }}
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          path: ${{ needs.test.outputs.npm-cache-dir }}
       - name: Install dependencies
         run: npm ci
       - name: Build website
